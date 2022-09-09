@@ -10,32 +10,24 @@
  */
 class Solution {
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        List<ListNode> list = new ArrayList<>();
+        ListNode result = new ListNode();
+        ListNode nextNode = result;
         int overValue = 0;
-        while (true) {
-            int value = l1.val + l2.val;
-            if (value + overValue > 9) {
-                list.add(new ListNode(value + overValue - 10));
-                overValue = 1;
-            } else {
-                list.add(new ListNode(value + overValue));
-                overValue = 0;
+        while (l1 != null || l2 != null || overValue != 0) {
+            int l1Value = l1 != null ? l1.val : 0;
+            int l2Value = l2 != null ? l2.val : 0;
+            int value = l1Value + l2Value + overValue;
+            nextNode.next = new ListNode(value % 10);
+            nextNode = nextNode.next;
+            overValue = value / 10;
+            if (l1 != null) {
+                l1 = l1.next;
             }
-            
-            if (l1.next == null && l2.next == null) {
-                break;
+            if (l2 != null) {
+                l2 = l2.next;
             }
-            l1 = l1.next == null ? new ListNode(0) : l1.next;
-            l2 = l2.next == null ? new ListNode(0) : l2.next;
         }
         
-        if (overValue > 0) {
-            list.add(new ListNode(overValue));
-        }
-        
-        for (int i = 0 ; i < list.size() - 1 ; i++) {
-            list.get(i).next = list.get(i + 1);
-        }
-        return list.get(0);
+        return result.next;
     }
 }
