@@ -3,15 +3,24 @@ import java.util.stream.Collectors;
 
 class Solution {
     public List<List<String>> groupAnagrams(String[] strs) {
-        Map<String, List<String>> map = new HashMap<>();
+        Map<Integer, List<String>> map = new HashMap<>();
 
         for (String str : strs) {
-            String sortedText = Arrays.stream(str.split("")).sorted().collect(Collectors.joining());
-            List<String> value = map.getOrDefault(sortedText, new ArrayList<>());
+            int hash = getKey(str);
+            List<String> value = map.getOrDefault(hash, new ArrayList<>());
             value.add(str);
-            map.put(sortedText, value);
+            map.put(hash, value);
         }
         
         return new ArrayList<>(map.values());
+    }
+    
+    public int getKey(String s) {
+        // # convert count to char again
+        int[] map = new int[26];
+        for(char c: s.toCharArray()) {
+            map[c - 'a']++;
+        }
+        return Arrays.hashCode(map);
     }
 }
