@@ -1,26 +1,21 @@
 class Solution {
     public List<List<Integer>> combine(int n, int k) {
         List<List<Integer>> result = new ArrayList<>();
-        for (int i = 1; i <= n; i++) {
-            List<Integer> values = new ArrayList<>();
-            values.add(i);
-            solution(result, n, k, values);
-        }
-        
+        solution(result, 1, n, k, new ArrayList<Integer>());
         return result;
     }
     
-    private void solution(List<List<Integer>> result, int n, int k, List<Integer> values) {
-        if (values.size() == k) {
-            result.add(values);
+    private void solution(List<List<Integer>> result, int start, int n, int k, List<Integer> values) {
+        if (k == 0) {
+            result.add(new ArrayList<Integer>(values));
             return;
         }
         
-        int lastValue = values.get(values.size() - 1);
-        for (int i = lastValue; i < n; i++) {
-            List<Integer> newValues = new ArrayList<>(values);
-            newValues.add(i + 1);
-            solution(result, n, k, newValues);
+        for (int i = start; i <= n; i++) {
+            values.add(i);
+            solution(result, i + 1, n, k - 1, values);
+            values.remove(values.size() - 1);
         }
     }
+    
 }
