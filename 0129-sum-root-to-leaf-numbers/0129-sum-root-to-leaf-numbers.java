@@ -15,19 +15,19 @@
  */
 class Solution {
     public int sumNumbers(TreeNode root) {
-        return recursive(root, "");
+        return recursive(root, 0);
     }
     
-    private int recursive(TreeNode root, String sum) {
+    private int recursive(TreeNode root, int sum) {
         if (root == null) {
-            return Integer.parseInt(sum);
+            return sum;
         }
         
         if (root.left == null && root.right == null) {
-            return Integer.parseInt(sum + String.valueOf(root.val));
+            return sum * 10 + root.val;
         }
         
-        sum += String.valueOf(root.val);
+        sum = sum * 10 + root.val;
         
         int left = 0;
         if (root.left != null) {
