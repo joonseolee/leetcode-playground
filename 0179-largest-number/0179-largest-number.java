@@ -13,6 +13,10 @@ class Solution {
             return b.compareTo(a);
         });
         
-        return new BigInteger(String.join("", numbers)).toString();
+        if (numbers.get(0).equals("0")) {
+            return "0";
+        }
+        
+        return String.join("", numbers);
     }
 }
