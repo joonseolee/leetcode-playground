@@ -6,61 +6,49 @@ class Solution {
         int xLength = board.length;
         int yLength = board[0].length;
         boolean[][] visited = new boolean[xLength][yLength];
-        Stack<Location> stack = new Stack<>();
+        
+        for (int i = 0; i < xLength; i++) {
+            if (board[i][0] == 'O' && !visited[i][0]) {
+                dfs(board, visited, i, 0);
+            }
+            
+            if (board[i][yLength - 1] == 'O' && !visited[i][yLength - 1]) {
+                dfs(board, visited, i, yLength - 1);
+            }
+        }
+        
+        for (int j = 0; j < yLength; j++) {
+            if (board[0][j] == 'O' && !visited[0][j]) {
+                dfs(board, visited, 0, j);
+            }
+            
+            if (board[xLength - 1][j] == 'O' && !visited[xLength - 1][j]) {
+                dfs(board, visited, xLength - 1, j);
+            }
+        }
         
         for (int i = 0; i < xLength; i++) {
             for (int j = 0; j < yLength; j++) {
                 if (board[i][j] == 'O' && !visited[i][j]) {
-                    boolean isPerfect = recursion(board, visited, stack, i, j, xLength, yLength);
-                    if (isPerfect) {
-                        while (!stack.isEmpty()) {
-                            Location location = stack.pop();
-                            board[location.x][location.y] = 'X';
-                        }
-                    }
-                    
-                    stack.clear();
+                    board[i][j] = 'X';
                 }
             }
         }
     }
     
-    private boolean recursion(char[][] board, boolean[][] visited, Stack<Location> stack, int i, int j, int xLength, int yLength) {
-        if (i < 0 || i >= xLength || j < 0 || j >= yLength) {
-            return false;
-        }
-        
-        if (board[i][j] == 'X') {
-            return true;
-        }
-        
+    private void dfs(char[][] board, boolean[][] visited, int i, int j) {
+        int xLength = board.length;
+        int yLength = board[0].length;
         visited[i][j] = true;
-        stack.add(new Location(i, j));
         
-        boolean result = true;
         for (int k = 0; k < 4; k++) {
             int moveX = i + xDirection[k];
             int moveY = j + yDirection[k];
-            if (0 <= moveX && xLength > moveX && 0 <= moveY && yLength > moveY && visited[i + xDirection[k]][j + yDirection[k]]) {
-                continue;
-            }
             
-            boolean value = recursion(board, visited, stack, i + xDirection[k], j + yDirection[k], xLength, yLength);
-            if (!value) {
-                result = false;
+            if (moveX >= 0 && moveX < xLength && moveY >= 0 && moveY < yLength 
+                && board[moveX][moveY] == 'O' && !visited[moveX][moveY]) {
+                dfs(board, visited, moveX, moveY);
             }
         }
-        
-        return result;
-    }
-    
-    private static class Location {
-        int x;
-        int y;
-        
-        public Location(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
+    } 
 }
