@@ -15,20 +15,21 @@
  */
 class BSTIterator {
     private List<Integer> list;
-    private Iterator iter;
+    private int currentIndex;
     
     public BSTIterator(TreeNode root) {
         this.list = new ArrayList<>();
         doLogic(root);
-        this.iter = this.list.listIterator();
     }
     
     public int next() {
-        return (int) this.iter.next();
+        int value = this.list.get(this.currentIndex);
+        this.currentIndex++;
+        return value;
     }
     
     public boolean hasNext() {
-        return this.iter.hasNext();
+        return this.currentIndex < this.list.size();
     }
     
     private void doLogic(TreeNode root) {
