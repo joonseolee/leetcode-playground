@@ -10,58 +10,35 @@
  */
 class Solution {
     public ListNode rotateRight(ListNode head, int k) {
-        if (head == null) {
-            return null;
-        }
-        
-        if (head.next == null || k == 0) {
+        if (k == 0 || head == null) {
             return head;
         }
         
-        int size = 1;
-        ListNode root = head;
-        while (root.next != null) {
-            root = root.next;
-            size++;
+        int count = 1;
+        ListNode temp = head;
+        while (temp.next != null) {
+            count++;
+            temp = temp.next;
         }
         
-        int startPoint = getStartPoint(size, k);
-        System.out.println(startPoint);
-        if (startPoint == 0) {
+        if (k > count) {
+            k = k % count;
+        }
+        
+        if (k == count) {
             return head;
         }
-
-        root = head;
-        while (startPoint > 1) {
-            root = root.next;
-            startPoint--;
+        
+        k = count - k - 1;
+        temp.next = head;
+        temp = head;
+        while (k > 0) {
+            k--;
+            temp = temp.next;
         }
         
-        ListNode result = root.next;
-        ListNode target = root.next;
-        root.next = null;
-        while (target.next != null) {
-            target = target.next;
-        }
-        
-        target.next = head;
-        return result;
-    }
-    
-    private int getStartPoint(int size, int k) {
-        if (size == k) {
-            return 0;
-        }
-        
-        if (size > k) {
-            return size - k;
-        }
-        
-        int rest = k % size;
-        if (rest == 0) {
-            return 0;
-        }
-        
-        return size - rest;
+        head = temp.next;
+        temp.next = null;
+        return head;
     }
 }
