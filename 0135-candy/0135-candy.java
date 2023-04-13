@@ -18,12 +18,6 @@ class Solution {
             }
         }
 
-        // sum up the candies for each child
-        int totalCandies = 0;
-        for (int i = 0; i < n; i++) {
-            totalCandies += candies[i];
-        }
-
-        return totalCandies;
+        return Arrays.stream(candies).sum();
     }
 }
