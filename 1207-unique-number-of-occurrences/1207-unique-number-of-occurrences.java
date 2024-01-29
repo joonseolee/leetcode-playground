@@ -7,14 +7,15 @@ class Solution {
             int temp = map.getOrDefault(value, 0);
             map.put(value, temp + 1);
         }
-
-        int before = -1;
-        for (int value : map.values().stream().sorted().collect(Collectors.toList())) {
-            if (value == before) {
-                return false;
+        
+        var set = new HashSet<Integer>();
+    
+        for (var val : map.values()) {
+            if (set.contains(val)) {
+              return false;
             }
-
-            before = value;
+            
+            set.add(val);
         }
 
         return true;
