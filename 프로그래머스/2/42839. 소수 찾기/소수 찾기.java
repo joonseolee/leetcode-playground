@@ -6,15 +6,13 @@ class Solution {
         char[] numArr = numbers.toCharArray();
         Set<Integer> result = new HashSet<>();
 
-        for (int i = 0; i < numbers.length(); i++) {
-            boolean[] visited = new boolean[numbers.length()];
-            permutation(numArr, result, visited, i, 0);
-        }
+        boolean[] visited = new boolean[numbers.length()];
+        permutation(numArr, result, visited, 0);
 
-        return result.size();
+        return result.size(); 
     }
 
-    private void permutation(char[] numArr, Set<Integer> result, boolean[] visited, int i, int value) {
+    private void permutation(char[] numArr, Set<Integer> result, boolean[] visited, int value) {
 
         if (value != 0) {
             if (isPrime(value)) {
@@ -33,7 +31,7 @@ class Solution {
             
             int acc = value * 10 + (numArr[k] - '0');
             visited[k] = true;
-            permutation(numArr, result, visited, i, acc);
+            permutation(numArr, result, visited, acc);
             visited[k] = false;
         }
     }
