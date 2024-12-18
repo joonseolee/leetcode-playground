@@ -14,44 +14,17 @@ class Solution {
             return head;
         }
 
-        ListNode result = head;
-        ListNode appendNode = null;
-
-        while (true) {
-            if (head.next == null) {
-                head.next = appendNode;
-                break;
-            }
-
-            ListNode temp = head.next;
-            if (appendNode == null) {
-                appendNode = temp;
-            } else {
-                append(appendNode, temp);
-            }
-
-            head.next = head.next.next;
-            temp.next = null;
-            if (head.next == null) {
-                head.next = appendNode;
-                break;
-            }
-            head = head.next;
-
+        ListNode odd = head;
+        ListNode even = head.next;
+        ListNode ehead = even;
+        while (even != null && even.next != null) {
+            odd.next = odd.next.next;
+            even.next = even.next.next;
+            odd = odd.next;
+            even = even.next;
         }
 
-        return result;
-    }
-
-    private void append(ListNode appendNode, ListNode temp) {
-        ListNode appendTemp = appendNode;
-        while (appendTemp != null) {
-            if (appendTemp.next == null) {
-                appendTemp.next = temp;
-                return;
-            }
-
-            appendTemp = appendTemp.next;
-        }
+        odd.next = ehead;
+        return head;
     }
 }
