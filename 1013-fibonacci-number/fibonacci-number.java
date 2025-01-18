@@ -10,10 +10,17 @@ class Solution {
             return n;
         }
 
-        if (arr[n] != 0) {
-            return arr[n];
+        arr[1] = 1;
+        for (int i = 2; i < n + 1; i++) {
+            arr[i] = arr[i - 2] + arr[i - 1];
         }
 
-        return arr[n] = solution(n - 1, arr) + solution(n - 2, arr);
+        return arr[n];
+
+        // if (arr[n] != 0) {
+        //     return arr[n];
+        // }
+
+        // return arr[n] = solution(n - 1, arr) + solution(n - 2, arr);
     }
 }
