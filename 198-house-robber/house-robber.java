@@ -1,28 +1,22 @@
 class Solution {
 
-    // tabulation
+    // 개선 
     public int rob(int[] nums) {
-        int[] dp = new int[nums.length];
-        for (int i = 0; i < nums.length; i++) {
-            dp[i] = nums[i];
+        int n = nums.length;
+
+        if (n == 1) {
+            return nums[0];
         }
 
-        solution(2, nums, dp);
+        int[] dp = new int[n];
 
-        return Arrays.stream(dp).max().getAsInt();
-    }
+        dp[0] = nums[0];
+        dp[1] = Math.max(nums[0], nums[1]);
 
-    private void solution(int current, int[] nums, int[] dp) {
-        if (current >= nums.length) {
-            return;
+        for (int i = 2; i < n; i++) {
+            dp[i] = Math.max(dp[i - 1], nums[i] + dp[i - 2]);
         }
 
-        int maxValue = Math.max(dp[current - 2] + dp[current], dp[current - 1]);
-        if (current - 3 > -1) {
-            maxValue = Math.max(maxValue, dp[current] + dp[current - 3]);
-        }
-
-        dp[current] = maxValue;
-        solution(current + 1, nums, dp);
+        return dp[n - 1];      
     }
 }
