@@ -1,21 +1,20 @@
 class Solution {
     public int lengthOfLIS(int[] nums) {
-        List<Integer> sub = new ArrayList<>();
-        
+        List<Integer> values = new ArrayList<>();
         for (int num : nums) {
-            int pos = Collections.binarySearch(sub, num);
-            
-            if (pos < 0) {
-                pos = -(pos + 1);
+            int index = Collections.binarySearch(values, num);
+
+            if (index < 0) {
+                index = -(index + 1);
             }
-            
-            if (pos < sub.size()) {
-                sub.set(pos, num);
+
+            if (index < values.size()) {
+                values.set(index, num);
             } else {
-                sub.add(num);
+                values.add(num);
             }
         }
-        
-        return sub.size();
+
+        return values.size();
     }
 }
