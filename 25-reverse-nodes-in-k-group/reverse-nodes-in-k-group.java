@@ -10,46 +10,55 @@
  */
 class Solution {
     public ListNode reverseKGroup(ListNode head, int k) {
-        // 예외 처리: 리스트가 비었거나, k가 1이면 뒤집을 필요 없음
         if (head == null || k == 1) return head;
 
-        // 1. 더미 노드 생성 (헤드가 바뀌는 경우를 대비해 맨 앞에 가짜 노드를 둡니다)
         ListNode dummy = new ListNode(0);
         dummy.next = head;
+        
+        // groupPrev: 뒤집을 그룹의 '직전' 노드
+        ListNode groupPrev = dummy;
 
-        // 2. 전체 리스트 길이 계산
-        ListNode cur = head;
-        int count = 0;
-        while (cur != null) {
-            cur = cur.next;
-            count++;
-        }
-
-        // 3. 그룹별로 뒤집기 시작
-        ListNode pre = dummy;   // 뒤집을 그룹의 '직전' 노드
-        ListNode curr = null;   // 현재 처리 중인 노드
-        ListNode nex = null;    // 앞으로 당겨올 노드
-
-        // 남은 노드 개수가 k개 이상일 때만 뒤집기 수행
-        while (count >= k) {
-            curr = pre.next; // 현재 그룹의 첫 번째 노드 (나중엔 그룹의 맨 뒤로 감)
-            nex = curr.next; // 현재 그룹의 두 번째 노드 (앞으로 당겨올 녀석)
-
-            // k개의 노드를 뒤집으려면 링크 조작은 k-1번 일어납니다.
-            // 예: 1->2->3을 뒤집으려면, 2를 1 앞으로, 3을 2 앞으로 (총 2번 이동)
-            for (int i = 0; i < k - 1; i++) {
-                // 이 부분이 핵심! (Pointer Rewiring)
-                curr.next = nex.next;  // 1. curr가 nex의 다음 노드를 가리키게 함
-                nex.next = pre.next;   // 2. nex가 현재 그룹의 맨 앞을 가리키게 함
-                pre.next = nex;        // 3. pre가 nex를 가리키게 함 (nex가 맨 앞으로 이동 완료)
-                nex = curr.next;       // 4. 다음 루프를 위해 nex 재설정
+        while (true) {
+            // 1. 현재 위치에서 k번째 노드가 존재하는지 확인 (k만큼 전진)
+            ListNode kth = groupPrev;
+            for (int i = 0; i < k && kth != null; i++) {
+                kth = kth.next;
             }
-            
-            // 한 그룹이 끝났으니 pre 포인터를 이번 그룹의 마지막 노드(curr)로 이동
-            pre = curr;
-            count -= k; // 처리한 k개만큼 전체 개수에서 차감
+
+            // k번째 노드가 없으면(null), 남은 노드가 k개 미만이라는 뜻 -> 그대로 두고 종료
+            if (kth == null) break;
+
+            // 2. 그룹의 범위 설정
+            ListNode groupStart = groupPrev.next; // 현재 그룹의 첫 노드
+            ListNode groupNext = kth.next;        // 다음 그룹의 첫 노드 (임시 저장)
+
+            // 3. 연결 끊기 (독립된 리스트로 만듦 - 뒤집기 쉽게)
+            kth.next = null; 
+
+            // 4. 그룹 뒤집기 (helper 함수 없이 인라인 처리도 가능하지만, 가독성 위해 로직 수행)
+            // 반환값은 뒤집힌 그룹의 새로운 시작(원래는 k번째였던 노드)
+            reverseList(groupStart);
+
+            // 5. 다시 연결하기
+            groupPrev.next = kth;       // 앞부분 연결: 이전 그룹 -> (뒤집힌) 현재 그룹 시작
+            groupStart.next = groupNext; // 뒷부분 연결: (뒤집힌) 현재 그룹 끝 -> 다음 그룹 시작
+
+            // 6. 포인터 이동
+            groupPrev = groupStart; // 방금 처리한 그룹의 마지막이 다음 그룹의 prev가 됨
         }
 
         return dummy.next;
+    }
+
+    // 표준적인 뒤집기 로직 (공간 O(1))
+    private void reverseList(ListNode head) {
+        ListNode prev = null;
+        ListNode curr = head;
+        while (curr != null) {
+            ListNode next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
     }
 }
